@@ -9,6 +9,6 @@ namespace ScardovelliBooking.Services.Contracts
     public interface IDataRepository
     {
         void SaveBooking(BookingVM booking);
-        Bookings GetBookings(DateTime date);
+        List<Booking> GetBookings(DateTime date);
     }
 }

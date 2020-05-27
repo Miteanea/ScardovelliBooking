@@ -15,15 +15,12 @@ namespace ScardovelliBooking.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IDataRepository _dataRepository;
         private readonly ScardovelliBookingsContext _context;
         
         public HomeController(ILogger<HomeController> logger,
-            IDataRepository dataRepository,
             ScardovelliBookingsContext context)
         {
             _logger = logger;
-            _dataRepository = dataRepository;
             _context = context;
         }
 
@@ -42,7 +39,6 @@ namespace ScardovelliBooking.Controllers
 
         public void Book(BookingVM booking)
         {
-            _dataRepository.SaveBooking(booking);
 
             Booking bookingDb = new Booking
             {
@@ -52,6 +48,7 @@ namespace ScardovelliBooking.Controllers
             };
 
             _context.Bookings.Add(bookingDb);
+            _context.SaveChanges();
         }
 
 

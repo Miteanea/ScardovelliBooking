@@ -22,7 +22,14 @@
                         </div>
                     }
                 </div>
-                <input name="Session" class="radio" id="session1" type="radio" value="1"/>
+                @if (Model.Where(b => b.Session == 1).Count() >= 6)
+                {
+                    <p>Massimo Raggiunto</p>
+                }
+                else
+                {
+                    <input name="Session" class="radio" id="session1" type="radio" value="1" />
+                }
             </div>
             <div class="flex-column border m-3 p-3 justify-content-center">
                 <label>Sezione 2</label>
@@ -34,7 +41,14 @@
                         </div>
                     }
                 </div>
-                <input name="Session" class="radio" id="session1" type="radio" value="2"/>
+                @if (Model.Where(b=>b.Session==2).Count() >= 6)
+                {
+                    <p>Massimo Raggiunto</p>
+                }
+                else
+                {
+                    <input name="Session" class="radio" id="session1" type="radio" value="2"/>
+                }
             </div>
         </div>
         <div class="d-flex flex-column border m-3 justify-content-center">
@@ -54,18 +68,15 @@
         HandleBooking(postUrl);
     });
 
-    $('.checkBox').change(function () {
-        alert('checkbox clicked');
+    $("input[name='Session']").change(function () {
+        $('#bookBtn').prop('disabled', false);
         debugger;
         if (this.checked) {
 
-            if ($('.booking1').length > 6) {
+            if ($(`.booking${this.value}`).length >= 6) {
                 $('#bookBtn').prop('disabled', true);
             }
-
-            if ($('.booking2').length > 6) {
-                $('#bookBtn').prop('disabled', true);
-            }
+            
         } else {
                 $('#bookBtn').prop('disabled', false);
         }

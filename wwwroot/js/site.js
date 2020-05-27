@@ -9,11 +9,9 @@ function HandleBooking(postUrl) {
         UserName: ""
     };
 
-    if ($('#session1').val()) {
-        model.Session = $('#session1').val();
+    if ($('input[name="Session"]:checked').val()) {
+        model.Session = $('input[name="Session"]:checked').val();
     }
-
-    $('input[name="Session"]:checked').val();
 
     model.UserName = $('#userName').val();
 
