@@ -1,0 +1,74 @@
+﻿@model List<ScardovelliBooking.Models.VMs.BookingVM>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+
+<div class="text-center">
+    <h1 class="display-4">Iscriviti</h1>
+</div>
+
+
+    <div class="d-flex flex-column border m-3 justify-content-center">
+        <div class="d-flex flex-row m-5 justify-content-center">
+            <div class="flex-column border m-3 p-3 justify-content-center">
+                <label>Sezione 1</label>
+                <div class="d-flex flex-column border m-2 justify-content-center">
+                    @foreach (var booking in Model.Where(b => b.Session == 1))
+                    {
+                        <div class="booking1">
+                            @booking.UserName
+                        </div>
+                    }
+                </div>
+                <input name="Session" class="radio" id="session1" type="radio" value="1"/>
+            </div>
+            <div class="flex-column border m-3 p-3 justify-content-center">
+                <label>Sezione 2</label>
+                <div class="d-flex flex-column border m-2 justify-content-center">
+                    @foreach (var booking in Model.Where(b => b.Session == 2))
+                    {
+                        <div class="booking2">
+                            @booking.UserName
+                        </div>
+                    }
+                </div>
+                <input name="Session" class="radio" id="session1" type="radio" value="2"/>
+            </div>
+        </div>
+        <div class="d-flex flex-column border m-3 justify-content-center">
+            <label>Nome : </label>
+            <input id="userName" type="text" placeholder="Nome Utente" />
+        </div>
+    </div>    
+
+
+    <button id="bookBtn">Iscriviti</button>
+
+<script>
+    var postUrl = "@Url.Action("Book", "Home")";
+    var indexUrl = "@Url.Action("Index", "Home")";
+
+    $('#bookBtn').click(function () {
+        HandleBooking(postUrl);
+    });
+
+    $('.checkBox').change(function () {
+        alert('checkbox clicked');
+        debugger;
+        if (this.checked) {
+
+            if ($('.booking1').length > 6) {
+                $('#bookBtn').prop('disabled', true);
+            }
+
+            if ($('.booking2').length > 6) {
+                $('#bookBtn').prop('disabled', true);
+            }
+        } else {
+                $('#bookBtn').prop('disabled', false);
+        }
+
+    })
+</script>
