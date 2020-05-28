@@ -16,23 +16,28 @@ namespace ScardovelliBooking.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ScardovelliBookingsContext _context;
-        
+
         public HomeController(ILogger<HomeController> logger,
             ScardovelliBookingsContext context)
         {
             _logger = logger;
             _context = context;
+            _bookingFor = DateTime.Today.AddDays(1);
         }
+
+        public DateTime _bookingFor { get; set; }
 
 
         public IActionResult Index()
         {
+            ViewData["Date"] = _bookingFor.ToShortDateString();
             List<BookingVM> bookings = _context.Bookings
-                .Where(b=> b.Date == DateTime.Today)
-                .Select(b => new BookingVM {
-                Session = b.Session,
-                UserName = b.UserName
-            }).ToList();
+                .Where(b=> b.Date == _bookingFor)
+                .Select(b => 
+                    new BookingVM {
+                        Session = b.Session,
+                        UserName = b.UserName
+                }).ToList();
                 
             return View(bookings);
         }
@@ -42,7 +47,7 @@ namespace ScardovelliBooking.Controllers
 
             Booking bookingDb = new Booking
             {
-                Date = DateTime.Today,
+                Date = _bookingFor,
                 Session = booking.Session,
                 UserName = booking.UserName
             };
