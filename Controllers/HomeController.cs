@@ -30,7 +30,7 @@ namespace ScardovelliBooking.Controllers
 
         public IActionResult Index()
         {
-            ViewData["Date"] = _bookingFor.ToShortDateString();
+            ViewData["Date"] = _bookingFor.ToString("dd/MM/yyyy");
             List<BookingVM> bookings = _context.Bookings
                 .Where(b=> b.Date == _bookingFor)
                 .Select(b => 
