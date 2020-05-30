@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ScardovelliBooking.Models;
@@ -16,6 +17,7 @@ namespace ScardovelliBooking.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ScardovelliBookingsContext _context;
+       
 
         public HomeController(ILogger<HomeController> logger,
             ScardovelliBookingsContext context)
@@ -26,34 +28,53 @@ namespace ScardovelliBooking.Controllers
         }
 
         public DateTime _bookingFor { get; set; }
-
+        private readonly int maxBookings = 8;
 
         public IActionResult Index()
         {
             ViewData["Date"] = _bookingFor.ToString("dd/MM/yyyy");
-            List<BookingVM> bookings = _context.Bookings
-                .Where(b=> b.Date == _bookingFor)
-                .Select(b => 
-                    new BookingVM {
-                        Session = b.Session,
-                        UserName = b.UserName
+
+            BookingVM bookings = new BookingVM(maxBookings);
+
+            bookings.Bookings = _context.Bookings
+            .Where(b => b.Date == _bookingFor)
+            .Select(b =>
+                new Booking
+                {
+                    Session = b.Session,
+                    UserName = b.UserName
                 }).ToList();
-                
+
             return View(bookings);
         }
 
-        public void Book(BookingVM booking)
+        public IActionResult Book(Booking booking)
         {
+            var bookingCount = _context.Bookings
+                .Where(b => b.Date == _bookingFor && b.Session == booking.Session)
+                .Count();
 
-            Booking bookingDb = new Booking
+            if (bookingCount < maxBookings)
             {
-                Date = _bookingFor,
-                Session = booking.Session,
-                UserName = booking.UserName
-            };
+                Booking bookingDb = new Booking
+                {
+                    Date = _bookingFor,
+                    Session = booking.Session,
+                    UserName = booking.UserName
+                };
 
-            _context.Bookings.Add(bookingDb);
-            _context.SaveChanges();
+                _context.Bookings.Add(bookingDb);
+                _context.SaveChanges();
+
+                return Json("Iscritto con successo!");
+            }
+            else
+            {
+                return Json("Sezione già piena!");
+            }
+
+
+
         }
 
 
@@ -63,6 +84,6 @@ namespace ScardovelliBooking.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        
+
     }
 }

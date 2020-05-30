@@ -19,6 +19,10 @@ namespace ScardovelliBooking.Services
 
     public class Booking
     {
+        public Booking()
+        {
+            
+        }
 
         [Key]
         public int ID { get; set; }

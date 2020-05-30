@@ -1,4 +1,4 @@
-﻿@model List<ScardovelliBooking.Models.VMs.BookingVM>
+﻿@model ScardovelliBooking.Models.VMs.BookingVM
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -7,7 +7,7 @@
 
 <div class="text-center">
     <h1 class="display-3">Iscriviti</h1>
-    <h2 class="display-4">@ViewData["Date"].ToString("dd/MM/yyy")</h2>
+    <h2 class="display-4">@ViewData["Date"]</h2>
 </div>
 
 
@@ -18,14 +18,14 @@
                 <label>Sezione 1</label>
             </h3>
             <div class="d-flex flex-column border m-2 justify-content-center">
-                @foreach (var booking in Model.Where(b => b.Session == 1))
+                @foreach (var booking in Model.Bookings.Where(b => b.Session == 1))
                 {
                     <div class="booking1">
                         @booking.UserName
                     </div>
                 }
             </div>
-            @if (Model.Where(b => b.Session == 1).Count() >= 6)
+            @if (Model.Bookings.Where(b => b.Session == 1).Count() >= Model.MaxCapacity)
             {
                 <p>Massimo Raggiunto</p>
             }
@@ -39,14 +39,14 @@
                 <label>Sezione 2</label>
             </h3>
             <div class="d-flex flex-column border m-2 justify-content-center">
-                @foreach (var booking in Model.Where(b => b.Session == 2))
+                @foreach (var booking in Model.Bookings.Where(b => b.Session == 2))
                 {
                     <div class="booking2">
                         @booking.UserName
                     </div>
                 }
             </div>
-            @if (Model.Where(b => b.Session == 2).Count() >= 6)
+            @if (Model.Bookings.Where(b => b.Session == 2).Count() >= Model.MaxCapacity)
             {
                 <p>Massimo Raggiunto</p>
             }
@@ -61,7 +61,7 @@
             <label>Nome : </label>
             <input id="userName" type="text" placeholder="Nome Utente" />
         </div>
-        <button class="btn btn-success" id="bookBtn">Iscriviti</button>
+        <button class="btn btn-success" id="bookBtn" disabled>Iscriviti</button>
     </div>
 </div>
 
@@ -76,15 +76,16 @@
 
     $("input[name='Session']").change(function () {
         $('#bookBtn').prop('disabled', false);
-        debugger;
+        
         if (this.checked) {
 
-            if ($(`.booking${this.value}`).length >= 6) {
+            @*if ($(`.booking${this.value}`).length >= @Model.MaxCapacity) {
                 $('#bookBtn').prop('disabled', true);
-            }
+            }*@
+                $('#bookBtn').prop('disabled', false);
 
         } else {
-                $('#bookBtn').prop('disabled', false);
+            $('#bookBtn').prop('disabled', true);
         }
 
     })

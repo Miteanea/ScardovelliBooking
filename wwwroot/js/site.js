@@ -20,7 +20,9 @@ function HandleBooking(postUrl) {
         $.ajax({
             url: postUrl,
             data: model,
-            success: function () {
+            success: function (data) {
+                alert(data);
+
                 window.location.href = indexUrl;
             },
             error: function () {
