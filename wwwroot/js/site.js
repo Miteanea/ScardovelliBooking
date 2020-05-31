@@ -32,3 +32,23 @@ function HandleBooking(postUrl) {
     }
 
 }
+
+function DeleteBooking(deleteUrl, ID) {
+    var model = {UserName : ID};
+
+    $.ajax({
+        url: deleteUrl,
+        data: {
+            UserName : ID
+        },
+        success: function (data) {
+            alert(data);
+
+            window.location.href = indexUrl;
+        },
+        error: function () {
+            alert('error');
+        }
+    });
+    
+}

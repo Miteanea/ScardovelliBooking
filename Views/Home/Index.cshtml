@@ -20,9 +20,12 @@
             <div class="d-flex flex-column border m-2 justify-content-center">
                 @foreach (var booking in Model.Bookings.Where(b => b.Session == 1))
                 {
-                    <div class="booking1">
-                        @booking.UserName
-                    </div>
+                <div class="booking1 d-flex flex-row" value="@booking.ID">
+                    @booking.UserName
+                    <button id="@booking.UserName" class="cancelBtn">
+                        <img src="~/remove.png" style="width: 25px; height:25px" />
+                    </button>
+                </div>
                 }
             </div>
             @if (Model.Bookings.Where(b => b.Session == 1).Count() >= Model.MaxCapacity)
@@ -41,8 +44,11 @@
             <div class="d-flex flex-column border m-2 justify-content-center">
                 @foreach (var booking in Model.Bookings.Where(b => b.Session == 2))
                 {
-                    <div class="booking2">
-                        @booking.UserName
+                    <div class="booking2 d-flex flex-row" value="@booking.ID">
+                            @booking.UserName
+                        <button id="@booking.UserName" class="cancelBtn">
+                            <img src="~/remove.png" style="width: 25px; height:25px" />
+                        </button>
                     </div>
                 }
             </div>
@@ -69,6 +75,7 @@
 <script>
     var postUrl = "@Url.Action("Book", "Home")";
     var indexUrl = "@Url.Action("Index", "Home")";
+    var deleteUrl = "@Url.Action("Delete", "Home")";
 
     $('#bookBtn').click(function () {
         HandleBooking(postUrl);
@@ -88,5 +95,9 @@
             $('#bookBtn').prop('disabled', true);
         }
 
+    })
+
+    $('.cancelBtn').click(function () {
+        DeleteBooking(deleteUrl, this.id);
     })
 </script>

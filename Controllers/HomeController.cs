@@ -17,7 +17,7 @@ namespace ScardovelliBooking.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ScardovelliBookingsContext _context;
-       
+
 
         public HomeController(ILogger<HomeController> logger,
             ScardovelliBookingsContext context)
@@ -48,6 +48,23 @@ namespace ScardovelliBooking.Controllers
             return View(bookings);
         }
 
+        public IActionResult Delete(string UserName)
+        {
+            try
+            {
+                _context.Bookings.Remove(_context.Bookings.Where(booking => 
+                    booking.UserName == UserName &&     
+                    booking.Date == _bookingFor).FirstOrDefault());
+                _context.SaveChanges();
+
+                return Json("Cancellato con successo!");
+            }
+            catch (Exception)
+            {
+                return Json("errore");
+            }
+        }
+
         public IActionResult Book(Booking booking)
         {
             var bookingCount = _context.Bookings
@@ -72,9 +89,6 @@ namespace ScardovelliBooking.Controllers
             {
                 return Json("Sezione già piena!");
             }
-
-
-
         }
 
 
